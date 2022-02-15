@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { loadMemoFB } from "../redux/modules";
+import Spinner from "./Spinner";
 
 const Layout = styled.section`
   width: 500px;
-  height: 100vh;
+  height: auto;
   margin: 20px auto;
   background: #02343f;
   position: relative;
@@ -39,7 +41,7 @@ const Card = styled.div`
 
 const AddCard = styled.button`
   position: absolute;
-  background: #f0edcc;
+  background: #787338;
   width: 80px;
   height: 80px;
   top: 85%;
@@ -56,59 +58,45 @@ const AddCard = styled.button`
 `;
 
 function Memo() {
-  const [title, setTitle] = useState("단어입니다");
-  const [describe, setDescribe] = useState("설명입니다");
-  const [example, setExample] = useState("예시입니다");
-
   const navigate = useNavigate();
-  const cardList = useSelector((state, idx) => [state]);
+  const cardList = useSelector((state, idx) => state.memo);
+  const dispatch = useDispatch();
+  const is_loading = useSelector((state) => state.memo.is_loading);
 
-  // const cardList2 = cardList.map((el, idx) => {
-  //   return <div>el.title</div>;
-  // });
-  // console.log("cardList2", cardList2);
+  useEffect(() => {
+    dispatch(loadMemoFB());
+  }, []);
 
   return (
     <>
       <Layout>
         <h2>나만의 메모장</h2>
-        {cardList.map((el, index) => {
-          console.log(el.memo.cards.title);
-          return (
-            <Card>
-              <div className="cardContents" key={index} id={index}>
-                <div>
-                  <h4>단어</h4>
-                  <span>{el.memo.cards.title}</span>
+        {/* {cardList.list &&
+          cardList.list.map((el, index) => {
+            return console.log(el);
+          })} */}
+        {cardList.list &&
+          cardList.list.map((el, index) => {
+            return (
+              <Card key={index}>
+                <div className="cardContents">
+                  <div>
+                    <h4>단어</h4>
+                    <span>{el.title}</span>
+                  </div>
+                  <div>
+                    <h4>설명</h4>
+                    <span>{el.describe}</span>
+                  </div>
+                  <div>
+                    <h4>예시</h4>
+                    <span>{el.example}</span>
+                  </div>
                 </div>
-                <div>
-                  <h4>설명</h4>
-                  <span>{el.memo.cards.describe}</span>
-                </div>
-                <div>
-                  <h4>예시</h4>
-                  <span>{el.memo.cards.example}</span>
-                </div>
-              </div>
-            </Card>
-          );
-        })}
-        <Card>
-          <div className="cardContents" id="1">
-            <div>
-              <h4>단어</h4>
-              <span>{title}</span>
-            </div>
-            <div>
-              <h4>설명</h4>
-              <span>{describe}</span>
-            </div>
-            <div>
-              <h4>예시</h4>
-              <span>{example}</span>
-            </div>
-          </div>
-        </Card>
+              </Card>
+            );
+          })}
+
         <AddCard
           onClick={() => {
             navigate("/post");
@@ -116,6 +104,7 @@ function Memo() {
         >
           <FontAwesomeIcon icon={faPlus} size="3x" />
         </AddCard>
+        {!is_loading && <Spinner />}
       </Layout>
     </>
   );

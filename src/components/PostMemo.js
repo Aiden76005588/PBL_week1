@@ -1,6 +1,7 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { addMemoFB } from "../redux/modules";
 
 const Layout = styled.section`
   width: 500px;
@@ -30,25 +31,40 @@ const AddButton = styled.button`
 `;
 
 function PostMemo() {
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const text_title = useRef(null);
+  const text_describe = useRef(null);
+  const text_example = useRef(null);
+
+  //   const addMemoList = () => {
+  //     addDoc(collection(db, "mymemo"), {
+  //       title: text_title,
+  //       describe: text_describe,
+  //       example: text_example,
+  //     });
+  //   };
+
+  useEffect(() => {}, []);
   return (
     <>
       <Layout>
         <h2>카드 추가하기</h2>
-        <form
-          action="submit"
-          onClick={() => {
-            navigate();
-          }}
-        >
-          <Input value="제목"></Input>
-          <Input value="설명" placeholder="예시"></Input>
-          <Input value="예시" placeholder="예시"></Input>
-        </form>
+        <div>
+          <Input type="text" ref={text_title} placeholder="제목"></Input>
+          <Input type="text" ref={text_describe} placeholder="설명"></Input>
+          <Input type="text" ref={text_example} placeholder="예시"></Input>
+        </div>
 
         <AddButton
           onClick={() => {
-            navigate(-1);
+            dispatch(
+              addMemoFB({
+                text_title: text_title.current.value,
+                text_describe: text_describe.current.value,
+                text_example: text_example.current.value,
+              })
+            );
+            window.location.replace("/");
           }}
         >
           추가하기
