@@ -5,7 +5,6 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { loadMemoFB } from "../redux/modules";
-import Spinner from "./Spinner";
 
 const Layout = styled.section`
   width: 500px;
@@ -14,6 +13,8 @@ const Layout = styled.section`
   background: #02343f;
   position: relative;
   padding-top: 30px;
+  border-radius: 20px;
+  box-shadow: 10px 10px 100px 10px rgba(0, 0, 0, 0.6);
   h2 {
     text-align: center;
     color: #f0edcc;
@@ -26,21 +27,25 @@ const Card = styled.div`
   margin: 0 auto;
   margin-bottom: 20px;
   background: #f0edcc;
-
+  border-radius: 20px;
   h4 {
     text-decoration: underline;
   }
   /* display: block; */
   .cardContents {
     padding: 30px;
+    color: gray;
     div {
       margin-bottom: 10px;
     }
   }
+  .example {
+    color: royalblue;
+  }
 `;
 
 const AddCard = styled.button`
-  position: absolute;
+  position: fixed;
   background: #787338;
   width: 80px;
   height: 80px;
@@ -61,20 +66,16 @@ function Memo() {
   const navigate = useNavigate();
   const cardList = useSelector((state, idx) => state.memo);
   const dispatch = useDispatch();
-  const is_loading = useSelector((state) => state.memo.is_loading);
 
   useEffect(() => {
     dispatch(loadMemoFB());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
       <Layout>
         <h2>나만의 메모장</h2>
-        {/* {cardList.list &&
-          cardList.list.map((el, index) => {
-            return console.log(el);
-          })} */}
+
         {cardList.list &&
           cardList.list.map((el, index) => {
             return (
@@ -90,7 +91,7 @@ function Memo() {
                   </div>
                   <div>
                     <h4>예시</h4>
-                    <span>{el.example}</span>
+                    <span className="example">{el.example}</span>
                   </div>
                 </div>
               </Card>
@@ -104,7 +105,6 @@ function Memo() {
         >
           <FontAwesomeIcon icon={faPlus} size="3x" />
         </AddCard>
-        {!is_loading && <Spinner />}
       </Layout>
     </>
   );

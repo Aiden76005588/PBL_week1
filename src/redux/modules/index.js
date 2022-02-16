@@ -33,29 +33,23 @@ export default function reducer(state = initialState, action = {}) {
 export const loadMemoFB = () => {
   return async function (dispatch) {
     const memo_data = await getDocs(collection(db, "mymemo"));
-    // console.log(memo_data);
     let memo_list = [];
     memo_data.forEach((doc) => {
-      // console.log(doc.data());
       memo_list.push({ id: doc.id, ...doc.data() });
     });
-    // console.log(memo_list);
     dispatch(loadMemo(memo_list));
   };
 };
 
 export const addMemoFB = (memo) => {
   return async function (dispatch) {
-    // console.log(memo);
     dispatch(isLoading(false));
+    console.log(memo);
     const docRef = await addDoc(collection(db, "mymemo"), {
       title: memo.text_title,
       describe: memo.text_describe,
       example: memo.text_example,
     });
-    // console.log(docRef);
-    // dispatch(docRef);
-    // const memo_data = { id: docRef.id, ...memo };
     dispatch(createMemo(docRef));
   };
 };
