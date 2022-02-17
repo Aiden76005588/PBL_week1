@@ -16,13 +16,13 @@ export default function reducer(state = initialState, action = {}) {
   switch (action.type) {
     // do reducer stuff
     case "memo/LOAD": {
-      return { list: action.memo_list, is_loading: true };
+      return { list: action.memo_list };
     }
     case "memo/CREATE": {
-      return { is_loading: true };
+      return {};
     }
     case "memo/LOADED": {
-      return { ...state, isLoading: action.loading };
+      return { ...state };
     }
 
     default:
@@ -43,7 +43,7 @@ export const loadMemoFB = () => {
 
 export const addMemoFB = (memo) => {
   return async function (dispatch) {
-    dispatch(isLoading(false));
+    // dispatch(isLoading(false));
     console.log(memo);
     const docRef = await addDoc(collection(db, "mymemo"), {
       title: memo.text_title,

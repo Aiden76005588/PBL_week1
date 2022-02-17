@@ -66,17 +66,16 @@ function PostMemo() {
   // window.location.replace("/");
   // window.location.reload();
 
-  const addMemoList = () => {
-    dispatch(
+  const addMemoList = async () => {
+    await dispatch(
       addMemoFB({
         text_title: text_title.current.value,
         text_describe: text_describe.current.value,
         text_example: text_example.current.value,
       })
     );
-    navigate("/");
 
-    // window.location.reload();
+    navigate("/", { replace: true });
     // window.location.replace("/");
   };
   console.log(text_title);

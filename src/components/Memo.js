@@ -62,11 +62,11 @@ const AddCard = styled.button`
   }
 `;
 
-function Memo() {
+function Memo({ match }) {
   const navigate = useNavigate();
   const cardList = useSelector((state, idx) => state.memo);
   const dispatch = useDispatch();
-
+  // window.location.reload();
   useEffect(() => {
     dispatch(loadMemoFB());
   }, [dispatch]);
